@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sac.mapper.SoundMapper">
+
+	<select id="getTopSoundList" resultType="com.sac.model.SoundVO">
+	<![CDATA[
+SELECT 
+    ss.soundId AS soundid, 
+    ss.soundNAME AS soundname, 
+    ss.soundInfo AS soundinfo, 
+    a.filename AS soundFilename, 
+    ai.FILENAME AS imageFilename,
+    ss.CATECODE AS cateCode
+FROM 
+    sac_sound ss
+join 
+    attachimage ai on ai.soundid = ss.soundid
+join 
+    attachsound a on a.soundid = ss.soundid
+ORDER BY 
+    ss.dcount DESC
+LIMIT 10;
+		 ]]>
+	</select>
+
+
+
+	<select id="getSoundList" resultType="com.sac.model.SoundVO">
+		<![CDATA[
+		SELECT ss.soundId AS soundid, ss.soundNAME AS soundname, ss.soundNAMEEng AS soundnameeng,
+		a.filename AS soundFilename, ai.FILENAME AS imageFilename, ss.cateCode AS cateCode,
+		concat(" #",ssc3.cateName," #",ssc2.cateName," #",ssc1.cateName) as soundInfo,
+		concat(" #",ssc3.cateNameEng," #",ssc2.cateNameEng," #",ssc1.cateNameEng) as soundInfoEng
+		from sac_sound ss
+		join sac_scate ssc1 on ssc1.catecode=ss.catecode 
+		join sac_scate ssc2 on ssc1.cateParent =ssc2.catecode 
+		join sac_scate ssc3 on ssc2.cateParent =ssc3.cateCode 
+		join attachimage ai on ai.catecode = ss.catecode
+		join attachsound a on a.soundid = ss.soundid
+		WHERE ss.cateCode = #{cateCode}
+		 LIMIT #{limit} OFFSET #{offset};
+    ]]>
+
+	</select>
+	
+	
+	
+	<select id="getsubSoundList" resultType="com.sac.model.SoundVO">
+		<![CDATA[
+		SELECT ss.soundId AS soundid, ss.soundNAME AS soundname, ss.soundNAMEEng AS soundnameeng,
+		a.filename AS soundFilename, ai.FILENAME AS imageFilename, ss.cateCode AS cateCode,
+		concat(" #",ssc3.cateName," #",ssc2.cateName," #",ssc1.cateName) as soundInfo,
+		concat(" #",ssc3.cateNameEng," #",ssc2.cateNameEng," #",ssc1.cateNameEng) as soundInfoEng
+		from sac_sound ss
+		join sac_scate ssc1 on ssc1.catecode=ss.catecode 
+		join sac_scate ssc2 on ssc1.cateParent =ssc2.catecode 
+		join sac_scate ssc3 on ssc2.cateParent =ssc3.cateCode 
+		join attachimage ai on ai.catecode = ss.catecode
+		join attachsound a on a.soundid = ss.soundid
+		WHERE SUBSTRING(ss.cateCode, 1, 5) = #{cateCode}
+		ORDER BY ss.dcount DESC
+		 LIMIT #{limit} OFFSET #{offset};
+    ]]>
+
+	</select>
+	
+		<select id="getmainSoundList" resultType="com.sac.model.SoundVO">
+		<![CDATA[
+		SELECT ss.soundId AS soundid, ss.soundNAME AS soundname, ss.soundNAMEEng AS soundnameeng,
+		a.filename AS soundFilename, ai.FILENAME AS imageFilename, ss.cateCode AS cateCode,
+		concat(" #",ssc3.cateName," #",ssc2.cateName," #",ssc1.cateName) as soundInfo,
+		concat(" #",ssc3.cateNameEng," #",ssc2.cateNameEng," #",ssc1.cateNameEng) as soundInfoEng
+		from sac_sound ss
+		join sac_scate ssc1 on ssc1.catecode=ss.catecode 
+		join sac_scate ssc2 on ssc1.cateParent =ssc2.catecode 
+		join sac_scate ssc3 on ssc2.cateParent =ssc3.cateCode 
+		join attachimage ai on ai.catecode = ss.catecode
+		join attachsound a on a.soundid = ss.soundid
+		WHERE SUBSTRING(ss.cateCode, 1, 2) = #{cateCode}
+		ORDER BY ss.dcount DESC
+		 LIMIT #{limit} OFFSET #{offset};
+    ]]>
+
+	</select>
+	
+	
+	<select id="getmainSoundCount" resultType="int">
+		<![CDATA[
+		select count(*)
+		from sac_sound ss
+		join attachimage ai on ai.catecode = ss.catecode
+		join attachsound a on a.soundid = ss.soundid
+		WHERE SUBSTRING(ss.cateCode, 1, 2) = #{cateCode}
+    ]]>
+
+	</select>
+	
+	
+	<select id="getsubSoundCount" resultType="int">
+		<![CDATA[
+		select count(*)
+		from sac_sound ss
+		join attachimage ai on ai.catecode = ss.catecode
+		join attachsound a on a.soundid = ss.soundid
+		WHERE SUBSTRING(ss.cateCode, 1, 5) = #{cateCode}
+    ]]>
+
+	</select>
+	
+	<select id="getmainTotalCount" parameterType="String"
+		resultType="int">
+		SELECT count(*)
+		FROM sac_sound ss
+		join attachimage ai
+		on ai.catecode = ss.catecode
+		join attachsound a on a.soundid =
+		ss.soundid
+		WHERE
+		WHERE SUBSTRING(ss.cateCode, 1, 2) = #{cateCode}
+	</select>
+
+	<select id="getSoundCount" resultType="int">
+		<![CDATA[
+		select count(*)
+		from sac_sound ss
+		join attachimage ai on ai.catecode = ss.catecode
+		join attachsound a on a.soundid = ss.soundid
+		WHERE ss.cateCode = #{cateCode}
+    ]]>
+
+	</select>
+
+
+	<select id="getTotalCount" parameterType="String"
+		resultType="int">
+		SELECT count(*)
+		FROM sac_sound ss
+		join attachimage ai
+		on ai.catecode = ss.catecode
+		join attachsound a on a.soundid =
+		ss.soundid
+		WHERE
+		ss.cateCode = #{cateCode}
+	</select>
+
+
+	<select id="getCountSearchSound" resultType="int">
+      
+        <![CDATA[
+        SELECT count(*)
+		FROM sac_sound ss
+            join sac_scate ssc1 on ssc1.catecode=ss.catecode 
+			join sac_scate ssc2 on ssc1.cateParent =ssc2.catecode 
+			join sac_scate ssc3 on ssc2.cateParent =ssc3.cateCode 
+            join sac_scate ss2 on ss2.catecode = ss.catecode
+            join attachimage ai on ai.catecode = ss.catecode
+            join attachsound a on a.soundid = ss.soundid
+        where
+    ]]>
+		<if test="keyword != null">
+			ss.soundNAME LIKE CONCAT('%', #{keyword}, '%')
+			or ssc3.cateName LIKE CONCAT('%', #{keyword}, '%')
+            or ssc2.cateName LIKE CONCAT('%', #{keyword}, '%')
+            or ssc1.cateName LIKE CONCAT('%', #{keyword}, '%')
+		</if>
+
+	</select>
+
+
+
+	<select id="getSearchSound" resultType="com.sac.model.SoundVO">
+    <![CDATA[
+            SELECT ss.soundId AS soundid, 
+                   ss.soundNAME AS soundname, 
+                   concat(" #",ssc3.cateName," #",ssc2.cateName," #",ssc1.cateName) as soundInfo,
+                   a.filename AS soundFilename, 
+                   ai.FILENAME AS imageFilename,
+                   ss.cateCode AS cateCode,
+                   ss2.CATENAME 
+            FROM sac_sound ss
+            join sac_scate ssc1 on ssc1.catecode=ss.catecode 
+			join sac_scate ssc2 on ssc1.cateParent =ssc2.catecode 
+			join sac_scate ssc3 on ssc2.cateParent =ssc3.cateCode 
+            join sac_scate ss2 on ss2.catecode = ss.catecode
+            join attachimage ai on ai.catecode = ss.catecode
+            join attachsound a on a.soundid = ss.soundid
+            WHERE ss.soundNAME LIKE CONCAT('%', #{keyword}, '%')
+            or ssc3.cateName LIKE CONCAT('%', #{keyword}, '%')
+            or ssc2.cateName LIKE CONCAT('%', #{keyword}, '%')
+            or ssc1.cateName LIKE CONCAT('%', #{keyword}, '%')
+            ORDER BY ss.soundId
+        LIMIT #{limit} OFFSET #{offset};
+
+    ]]>
+	</select>
+
+
+	<select id="getSubSearchSound"
+		resultType="com.sac.model.SoundVO">
+    <![CDATA[
+            SELECT ss.soundId AS soundid, 
+                   ss.soundNAME AS soundname, 
+                   concat(" #",ssc3.cateName," #",ssc2.cateName," #",ssc1.cateName) as soundInfo, 
+                   a.filename AS soundFilename, 
+                   ai.FILENAME AS imageFilename,
+                   ss.cateCode AS cateCode,
+                   ss2.CATENAME
+            FROM sac_sound ss
+            join sac_scate ssc1 on ssc1.catecode=ss.catecode 
+			join sac_scate ssc2 on ssc1.cateParent =ssc2.catecode 
+			join sac_scate ssc3 on ssc2.cateParent =ssc3.cateCode 
+            join sac_scate ss2 on ss2.catecode = ss.catecode
+            join attachimage ai on ai.catecode = ss.catecode
+            join attachsound a on a.soundid = ss.soundid
+            WHERE ss.soundNAME LIKE CONCAT('%', #{keyword}, '%')
+            AND ss.cateCode = #{cateCode}
+            ORDER BY ss.soundId
+       LIMIT #{limit} OFFSET #{offset};
+    ]]>
+	</select>
+
+
+	<select id="getCountSubSearchSound" resultType="int">
+      
+      <![CDATA[
+        SELECT count(*)
+		from sac_sound ss
+		join attachimage ai on ai.catecode = ss.catecode
+		join attachsound a on a.soundid = ss.soundid
+        where
+             
+    ]]>
+		<if test="keyword != null">
+			ss.soundNAME LIKE CONCAT('%', #{keyword}, '%')
+			and ss.cateCode = #{cateCode}
+		</if>
+
+	</select>
+	
+	
+	
+	
+
+
+
+
+
+
+	<select id="getCountSearchSoundEng" resultType="int">
+      
+        <![CDATA[
+        SELECT count(*)
+		FROM sac_sound ss
+            join sac_scate ssc1 on ssc1.catecode=ss.catecode 
+			join sac_scate ssc2 on ssc1.cateParent =ssc2.catecode 
+			join sac_scate ssc3 on ssc2.cateParent =ssc3.cateCode 
+            join sac_scate ss2 on ss2.catecode = ss.catecode
+            join attachimage ai on ai.catecode = ss.catecode
+            join attachsound a on a.soundid = ss.soundid
+        where
+    ]]>
+		<if test="keyword != null">
+			ss.soundNAMEEng LIKE CONCAT('%', #{keyword}, '%')
+			or ssc3.cateNameEng LIKE CONCAT('%', #{keyword}, '%')
+            or ssc2.cateNameEng LIKE CONCAT('%', #{keyword}, '%')
+            or ssc1.cateNameEng LIKE CONCAT('%', #{keyword}, '%')
+		</if>
+
+	</select>
+
+
+
+	<select id="getSearchSoundEng" resultType="com.sac.model.SoundVO">
+    <![CDATA[
+            SELECT ss.soundId AS soundid, 
+                   ss.soundNAMEEng AS soundnameEng, 
+                   concat(" #",ssc3.cateNameEng," #",ssc2.cateNameEng," #",ssc1.cateNameEng) as soundInfoEng,
+                   a.filename AS soundFilename, 
+                   ai.FILENAME AS imageFilename,
+                   ss.cateCode AS cateCode,
+                   ss2.CATENAMEEng 
+            FROM sac_sound ss
+            join sac_scate ssc1 on ssc1.catecode=ss.catecode 
+			join sac_scate ssc2 on ssc1.cateParent =ssc2.catecode 
+			join sac_scate ssc3 on ssc2.cateParent =ssc3.cateCode 
+            join sac_scate ss2 on ss2.catecode = ss.catecode
+            join attachimage ai on ai.catecode = ss.catecode
+            join attachsound a on a.soundid = ss.soundid
+            WHERE ss.soundNAMEEng LIKE CONCAT('%', #{keyword}, '%')
+            or ssc3.cateNameEng LIKE CONCAT('%', #{keyword}, '%')
+            or ssc2.cateNameEng LIKE CONCAT('%', #{keyword}, '%')
+            or ssc1.cateNameEng LIKE CONCAT('%', #{keyword}, '%')
+            ORDER BY ss.soundId
+        LIMIT #{limit} OFFSET #{offset};
+
+    ]]>
+	</select>
+
+
+	<select id="getSubSearchSoundEng"
+		resultType="com.sac.model.SoundVO">
+    <![CDATA[
+            SELECT ss.soundId AS soundid, 
+                   ss.soundNAMEEng AS soundnameEng, 
+                   concat(" #",ssc3.cateNameEng," #",ssc2.cateNameEng," #",ssc1.cateNameEng) as soundInfoEng, 
+                   a.filename AS soundFilename, 
+                   ai.FILENAME AS imageFilename,
+                   ss.cateCode AS cateCode,
+                   ss2.CATENAMEEng
+            FROM sac_sound ss
+            join sac_scate ssc1 on ssc1.catecode=ss.catecode 
+			join sac_scate ssc2 on ssc1.cateParent =ssc2.catecode 
+			join sac_scate ssc3 on ssc2.cateParent =ssc3.cateCode 
+            join sac_scate ss2 on ss2.catecode = ss.catecode
+            join attachimage ai on ai.catecode = ss.catecode
+            join attachsound a on a.soundid = ss.soundid
+            WHERE ss.soundNAMEEng LIKE CONCAT('%', #{keyword}, '%')
+            AND ss.cateCode = #{cateCode}
+            ORDER BY ss.soundId
+       LIMIT #{limit} OFFSET #{offset};
+    ]]>
+	</select>
+
+
+	<select id="getCountSubSearchSoundEng" resultType="int">
+      
+      <![CDATA[
+        SELECT count(*)
+		from sac_sound ss
+		join attachimage ai on ai.catecode = ss.catecode
+		join attachsound a on a.soundid = ss.soundid
+        where
+             
+    ]]>
+		<if test="keyword != null">
+			ss.soundNAMEEng LIKE CONCAT('%', #{keyword}, '%')
+			and ss.cateCode = #{cateCode}
+		</if>
+
+	</select>
+
+
+
+
+
+
+
+	<select id="getAllSound" resultType="com.sac.model.SoundVO">
+      
+      <![CDATA[
+        select concat(ss.soundName, " 효과음") soundName
+		from sac_sound ss
+		order by soundName;
+             
+    ]]>
+
+	</select>
+
+
+	<update id="increaseDownloadCount">
+
+		update sac_sound
+		set dcount = dcount + 1
+		where
+		soundId = #{soundId}
+
+	</update>
+</mapper>

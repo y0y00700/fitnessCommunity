@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sac.mapper.UrlMapper">
+	<select id="getAllUrl" resultType="com.sac.model.UrlVO"> 
+	<![CDATA[
+SELECT DISTINCT 
+    ssc3.cateCode AS cateCode, 
+    ssc2.cateCode AS subCode, 
+    ssc1.cateCode AS subsubCode,
+    CONCAT(ssc3.cateName, ", ", ssc2.cateName, ", ", ssc1.cateName, " 효과음 무료 다운로드 | sounduck 사운덕") AS title,
+    concat(GROUP_CONCAT(ss.soundName ORDER BY ss.soundName ASC SEPARATOR ', '), " 효과음 무료 다운로드 | sounduck 사운덕") AS description,
+    CONCAT(ssc3.cateNameEng, ", ", ssc2.cateNameEng, ", ", ssc1.cateNameEng, " sound effect free download | sounduck") AS titleEng,
+    concat(GROUP_CONCAT(ss.soundNameEng ORDER BY ss.soundNameEng ASC SEPARATOR ', '), " sound effect free download | sounduck") AS descriptionEng
+	FROM sac_sound ss
+	JOIN sac_scate ssc1 ON ssc1.cateCode = ss.cateCode
+	JOIN sac_scate ssc2 ON ssc1.cateParent = ssc2.cateCode
+	JOIN sac_scate ssc3 ON ssc2.cateParent = ssc3.cateCode
+	GROUP BY ssc3.cateCode, ssc2.cateCode, ssc1.cateCode
+		 ]]>
+	</select>
+</mapper>

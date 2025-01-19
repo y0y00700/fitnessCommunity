@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.sac.mapper.AttachMapper">
+  
+	<select id="getAttachList" resultType="com.sac.model.AttachImageVO">
+	
+		select filename from sac.attachimage where soundId = #{soundId}
+	
+	</select>
+	
+	<select id="getAttachList2" resultType="com.sac.model.AttachSoundVO">
+	
+		select filename from sac.attachsound where soundId = #{soundId}
+	
+	</select>
+
+  </mapper>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sac.mapper.CateMapper">
+	<select id="getCategories" resultType="com.sac.model.CateVO">
+      
+      <![CDATA[
+            SELECT ss.cateName AS cateName, ss.cateCode, ss.cateNameEng, a.fileName AS imageFilename
+			FROM sac_scate ss
+			JOIN attachimage a ON ss.cateCode = a.cateCode
+			WHERE ss.tier = 1
+			ORDER BY ss.menuorder;
+    ]]>
+
+	</select>
+	
+		<select id="getTotalSubCategories" resultType="com.sac.model.CateVO">
+      
+      <![CDATA[
+             select *
+             from sac_scate
+             where tier=2
+    ]]>
+
+	</select>
+	
+
+	<select id="getSubCategories" resultType="com.sac.model.CateVO">
+      <![CDATA[
+		 select *
+         from sac_scate
+         where CATEPARENT = #{catecode}
+         and tier=2
+      ]]>
+	</select>
+	
+	<select id="getSubSubCategories" resultType="com.sac.model.CateVO">
+      <![CDATA[
+		 select *
+         from sac_scate
+         where CATEPARENT = #{catecode}
+         and tier=3
+      ]]>
+	</select>
+	
+	
+	<select id="getSubSubSearch" resultType="com.sac.model.CateVO">
+      <![CDATA[
+		 SELECT ss2.cateCode, ss2.cateName, COUNT(*) AS num
+		 FROM sac_sound ss
+		 JOIN sac_scate ss2 ON ss.cateCode = ss2.cateCode
+		 WHERE ss.soundName LIKE CONCAT('%', #{keyword}, '%')
+  	     AND ss2.tier = 3
+	     GROUP BY ss2.cateCode, ss2.cateName;
+      ]]>
+	</select>
+	
+	<select id="getSubSubSearchEng" resultType="com.sac.model.CateVO">
+      <![CDATA[
+		 SELECT ss2.cateCode, ss2.cateNameEng, COUNT(*) AS num
+		 FROM sac_sound ss
+		 JOIN sac_scate ss2 ON ss.cateCode = ss2.cateCode
+		 WHERE ss.soundNameEng LIKE CONCAT('%', #{keyword}, '%')
+  	     AND ss2.tier = 3
+	     GROUP BY ss2.cateCode, ss2.cateNameEng;
+      ]]>
+	</select>
+	
+	
+	<select id="getMetaTag" resultType="String">
+      <![CDATA[
+         select concat(GROUP_CONCAT(concat(cateName,' 효과음') SEPARATOR ', '), ', 무료 효과음 다운로드 사이트 | sounduck 사운덕') as metaData   
+         from sac_scate ss2 
+         where cateCode LIKE CONCAT(#{catecode}, '%')
+      ]]>
+	</select>
+	
+	<select id="getMetaTagEng" resultType="String">
+      <![CDATA[
+         select concat(GROUP_CONCAT(concat(cateNameEng,' sound') SEPARATOR ', '), ', sound effect free download | sounduck') as metaData   
+         from sac_scate ss2 
+         where cateCode LIKE CONCAT(#{catecode}, '%')
+      ]]>
+	</select>
+	
+	
+	<select id="getMetaTag2" resultType="String">
+      <![CDATA[
+      
+		 select CONCAT(cateName,' 효과음 무료 다운로드 | sounduck 사운덕') as cateName
+         from sac_scate
+         where catecode = #{catecode}
+      ]]>
+	</select>
+	
+	
+    <select id="getMetaTag2Eng" resultType="String">
+      <![CDATA[
+      
+		 select CONCAT(cateNameEng,' sound free download | sounduck') as cateNameEng
+         from sac_scate
+         where catecode = #{catecode}
+      ]]>
+	</select>
+	
+	<select id="getCateNameByCode" resultType="String">
+      <![CDATA[
+		 select cateName
+         from sac_scate
+         where catecode = #{catecode}
+         and tier=1
+      ]]>
+	</select>
+	
+	<select id="getCateNameEngByCode" resultType="String">
+      <![CDATA[
+		 select cateNameEng
+         from sac_scate
+         where catecode = #{catecode}
+         and tier=1
+      ]]>
+	</select>
+	
+	<select id="getAllCateCode" resultType="com.sac.model.CateVO">
+      <![CDATA[
+		 SELECT 
+    CASE 
+        WHEN a.tier = 1 THEN CONCAT(a.cateName, " 효과음 무료 다운로드")
+        WHEN a.tier = 2 THEN CONCAT(b.cateName, ' ', a.cateName," 효과음 무료 다운로드")
+        WHEN a.tier = 3 THEN CONCAT(c.cateName, ' ', b.cateName, ' ', a.cateName, " 효과음 무료 다운로드")
+    END AS fullcateName,
+    CASE 
+        WHEN a.tier = 1 THEN CONCAT(a.cateNameEng, " sound free download")
+        WHEN a.tier = 2 THEN CONCAT(b.cateNameEng, ' ', a.cateNameEng," sound free download")
+        WHEN a.tier = 3 THEN CONCAT(c.cateNameEng, ' ', b.cateNameEng, ' ', a.cateNameEng, " sound free download")
+    END AS fullcateNameEng,
+    CASE 
+        WHEN a.tier = 1 THEN a.cateCode
+        WHEN a.tier = 2 THEN b.cateCode
+        WHEN a.tier = 3 THEN c.cateCode
+    END AS cateCode,
+    CASE 
+        WHEN a.tier = 2 THEN a.cateCode
+        WHEN a.tier = 3 THEN b.cateCode
+        ELSE NULL
+    END AS subCode,
+    CASE 
+        WHEN a.tier = 3 THEN a.cateCode
+        ELSE NULL
+    END AS subsubCode
+	FROM sac_scate a
+	LEFT JOIN sac_scate b ON a.cateParent = b.cateCode AND a.tier IN (2, 3)
+	LEFT JOIN sac_scate c ON b.cateParent = c.cateCode AND a.tier = 3
+	ORDER BY a.tier, a.cateCode;
+      ]]>
+</select>
+
+</mapper>
