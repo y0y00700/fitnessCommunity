@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.sac.mapper.InquiryMapper"> <!-- 연동하고자하는 Mapper interface 명시 #{VO에 저장된 데이터이름}-->
+	<insert id="insertInquiry">
+		INSERT INTO inquiries(title, content, email) VALUES(#{title}, #{content}, #{email})
+  	</insert>
+  </mapper>

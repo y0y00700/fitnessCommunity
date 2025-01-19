@@ -1,0 +1,178 @@
+#hashtag-box {
+	border: 2px solid #ccc;
+	padding: 2px;
+	width: 70%;
+	margin: 0 auto;
+	min-height: 60px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+	border-radius: 30px;
+	background-color: white;
+	box-sizing: border-box;
+}
+
+#hashtags {
+	width: 60%;
+	height: 40px;
+	font-size: 16px;
+	padding: 10px;
+	border: 2px solid #ccc;
+	border-radius: 5px 0 0 5px;
+}
+
+.input-group-append {
+	display: flex;
+}
+
+#add-hashtag-button {
+	height: 40px;
+	border-radius: 0 5px 5px 0;
+}
+
+.input-group-append .btn {
+	height: 40px;
+	border-radius: 0 5px 5px 0;
+}
+
+#hashtag-container {
+	text-align: center;
+}
+
+.hashtag {
+	display: inline-flex;
+	align-items: center;
+	background-color: #f0f0f0;
+	color: #333;
+	font-size: 13px;
+	padding: 3px 5px;
+	margin: 5px;
+	border-radius: 15px;
+	border: 1px solid #ddd;
+}
+
+.hashtag .remove-btn {
+	margin-left: 2px;
+	background-color: transparent;
+	border: none;
+	font-size: 13px;
+	color: #888;
+	cursor: pointer;
+	transition: color 0.3s;
+}
+
+.hashtag .remove-btn:hover {
+	color: #ff4d4d;
+}
+
+button {
+	background-color: #4CAF50;
+	color: white;
+	padding: 5px 10px;
+	font-size: 16px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s;
+}
+
+#iframe-container {
+	margin-top: 20px;
+}
+
+iframe {
+	width: 100%;
+	height: 1000px;
+	border: 5px solid #f3f3f3;
+}
+
+.spinner {
+	width: 50px;
+	height: 50px;
+	border: 5px solid #f3f3f3;
+	border-top: 5px solid #3498db;
+	border-radius: 50%;
+	animation: spin 1s linear infinite;
+	margin: 0 auto;
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+button.disabled {
+	background-color: #ccc;
+	color: #777;
+	cursor: not-allowed;
+}
+
+.custom-button {
+	padding: 4px 10px;
+	font-size: 22px;
+	height: auto;
+	line-height: 1.2;
+	background-color: black;
+	color: white;
+	border: 2px solid transparent;
+	position: relative;
+}
+
+.custom-button:hover {
+	background-color: #c0c0c0;
+	color: #333;
+}
+
+.header-logo {
+	font-weight: bold;
+	font-size: 50px;
+	color: black;
+	margin-top: 20px;
+	text-align: center;
+}
+
+.text-muted {
+	text-align: center;
+}
+
+.generate-button {
+	background-color: black; /* 기본 배경색 */
+	color: white; /* 기본 글씨 색 */
+	border: none;
+	padding: 12px 30px; /* 버튼 안의 여백을 늘려 길이를 조정 */
+	font-size: 16px;
+	cursor: pointer;
+	border-radius: 5px; /* 둥근 모서리 */
+	transition: all 0.3s ease; /* 애니메이션 효과 */
+}
+
+.generate-button:hover {
+	background-color: gray; /* 호버 시 배경색 */
+	color: black; /* 호버 시 글씨 색 */
+}
+
+.generate-button-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 10px;
+}
+
+.loading-gif {
+	margin-top: 10px;
+	width: 200px;
+	height: 200px;
+}
+
+@media ( max-width : 767.98px) {
+	footer {
+		font-size: 9px !important;
+	}
+	
+	.text-muted {
+		font-size: 13px !important;
+	}

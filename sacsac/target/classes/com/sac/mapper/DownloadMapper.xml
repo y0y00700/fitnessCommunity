@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.sac.mapper.DownloadMapper">
+  
+	<select id="selectDownloadCountByIp" resultType="com.sac.model.DownloadCountVO">
+	
+		SELECT id, ipaddress, downloadcount, lastreset
+        FROM download_counts
+        WHERE ipaddress = #{ipAddress}
+	</select>
+	
+	<select id="insertDownloadCount">
+		INSERT INTO download_counts (ipaddress, downloadcount)
+        VALUES (#{ipAddress}, #{downloadCount})
+	</select>
+	
+	  <update id="updateDownloadCount">
+        UPDATE download_counts
+        SET downloadcount = downloadcount+1, lastreset = CURRENT_TIMESTAMP
+        WHERE ipaddress = #{ipAddress}
+    </update>
+    
+     <update id="resetDownloadCount">
+        UPDATE download_counts
+        SET downloadcount = 0, lastreset = CURRENT_TIMESTAMP
+        WHERE ipaddress = #{ipAddress}
+    </update>
+
+  </mapper>
